@@ -30,53 +30,105 @@
 (() => {
   'use strict';
   /**
-   * Player do menu board.
+   * Player do menu board com GRADE DE PROGRAMAÇÃO.
    *
-   * - slides.json dita a ordem e o tempo de cada slide (default 7 s).
-   * - A cada 10 min busca o slides.json de novo com cache-busting; se mudou,
-   *   troca a lista SEM recarregar a página — o carrossel nem pisca.
-   * - Sem rede: segue com o último conteúdo (memória + localStorage) até voltar.
-   * - Uma vez por dia, de madrugada, um reload completo limpa qualquer vazamento
-   *   de memória de dias rodando direto na TV.
+   * Papel da TV vem da URL:
+   *   ?tv=1        → loop de promoções (playlist "promo")
+   *   ?tv=2..6     → playlist do daypart/tipo de dia corrente (grade.json)
+   *   ?agora=ISO   → SÓ PARA TESTE: simula o relógio (segue andando a partir
+   *                  do instante passado, então as viradas acontecem de verdade)
+   *
+   * A cada 10 min busca slides.json + grade.json + feriados.json com
+   * cache-busting; mudou, troca o conteúdo SEM recarregar a página. A troca
+   * de playlist no horário de virada é verificada a cada 30 s e acontece no
+   * próximo avanço do carrossel — sem reload, sem piscar.
+   *
+   * Fora de horário: playlist "institucional". Sem rede: segue no último
+   * conteúdo guardado (memória + localStorage).
    */
   const INTERVALO_BUSCA_MS = 10 * 60 * 1000;
+  const INTERVALO_GRADE_MS = 30 * 1000;
   const SEGUNDOS_PADRAO = 7;
   const HORA_DO_RELOAD = 4; // 04h — loja fechada
 
+  const params = new URLSearchParams(location.search);
+  const TV = Math.max(1, parseInt(params.get('tv') || '2', 10) || 2);
+
+  // Relógio: real, ou simulado que ANDA (para provar as viradas em teste).
+  const baseSimulada = params.get('agora') ? new Date(params.get('agora')) : null;
+  const t0 = Date.now();
+  const agora = () =>
+    baseSimulada && !isNaN(baseSimulada)
+      ? new Date(baseSimulada.getTime() + (Date.now() - t0))
+      : new Date();
+
   const quadros = [document.getElementById('a'), document.getElementById('b')];
   const aviso = document.getElementById('aviso');
-  let ativo = 0;          // qual quadro está visível
-  let slides = [];        // [{arquivo, segundos}]
+  let ativo = 0;
+  let manifesto = new Map(); // arquivo → segundos
+  let grade = null;          // grade.json
+  let feriados = new Set();  // datas AAAA-MM-DD
+  let playlistNome = '';     // qual playlist está no ar
+  let slides = [];           // [{arquivo, segundos}] da playlist corrente
   let indice = 0;
   let timer = null;
-  let assinatura = '';    // p/ saber se o slides.json mudou
   let recarregouHoje = false;
 
-  const guardar = (json) => { try { localStorage.setItem('slides', json); } catch (e) {} };
-  const guardado = () => { try { return localStorage.getItem('slides'); } catch (e) { return null; } };
+  const guardar = (chave, texto) => { try { localStorage.setItem(chave, texto); } catch (e) {} };
+  const guardado = (chave) => { try { return localStorage.getItem(chave); } catch (e) { return null; } };
 
-  function aplicar(json) {
-    if (json === assinatura) return; // nada mudou
-    let dados;
-    try { dados = JSON.parse(json); } catch (e) { return; }
-    if (!dados || !Array.isArray(dados.slides) || !dados.slides.length) return;
-    assinatura = json;
-    guardar(json);
-    // Pré-carrega tudo antes de assumir: TV não pode mostrar imagem quebrada.
-    let pendentes = dados.slides.length;
-    dados.slides.forEach((s) => {
-      const im = new Image();
-      im.onload = im.onerror = () => { if (--pendentes === 0) assumir(dados.slides); };
-      im.src = s.arquivo;
-    });
+  // ------------------------------------------------------------ grade
+  const minutos = (hhmm) => {
+    const [h, m] = String(hhmm).split(':').map(Number);
+    return (h || 0) * 60 + (m || 0);
+  };
+  const dataISO = (d) =>
+    d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
+  /** Qual playlist esta TV deve exibir NESTE instante. */
+  function playlistAlvo() {
+    if (!grade) return null;
+    if (TV === 1) return 'promo';
+    const d = agora();
+    const min = d.getHours() * 60 + d.getMinutes();
+    const fds = d.getDay() === 0 || d.getDay() === 6 || feriados.has(dataISO(d));
+    const tipo = fds ? 'fds_feriado' : 'util';
+    for (const [nome, faixa] of Object.entries(grade.dayparts || {})) {
+      if (min >= minutos(faixa.inicio) && min < minutos(faixa.fim)) {
+        return (grade.mapa?.[nome] || {})[tipo] || null;
+      }
+    }
+    return 'institucional'; // fora de qualquer daypart
   }
 
-  function assumir(novos) {
+  /** Materializa a playlist corrente a partir do manifesto (ou do nome cru). */
+  function montarSlides(nome) {
+    const arquivos = (grade?.playlists || {})[nome] || [];
+    return arquivos.map((a) => ({ arquivo: a, segundos: manifesto.get(a) ?? SEGUNDOS_PADRAO }));
+  }
+
+  /** Verificada a cada 30 s; a troca vale a partir do próximo avanço. */
+  // Estado inspecionável (suporte e validação): que playlist está no ar?
+  window.estadoTv = () => ({
+    tv: TV,
+    relogio: agora().toString(),
+    playlist: playlistNome,
+    slides: slides.map((s) => s.arquivo),
+  });
+
+  function aplicarGrade() {
+    const alvo = playlistAlvo();
+    if (!alvo || alvo === playlistNome) return;
+    const novos = montarSlides(alvo);
+    if (!novos.length) return; // playlist vazia: fica onde está
+    playlistNome = alvo;
     slides = novos;
-    if (indice >= slides.length) indice = 0;
-    if (!timer) proximo(); // primeira vez: começa o carrossel
+    indice = 0;
+    // pré-carrega a playlist que entrou
+    novos.forEach((s) => { const im = new Image(); im.src = s.arquivo; });
   }
 
+  // ------------------------------------------------------------ carrossel
   function proximo() {
     if (!slides.length) { timer = setTimeout(proximo, 2000); return; }
     const s = slides[indice % slides.length];
@@ -84,7 +136,6 @@
     const entra = quadros[1 - ativo];
     const sai = quadros[ativo];
     entra.style.backgroundImage = "url('" + s.arquivo + "')";
-    // Um respiro para o estilo assentar antes do fade.
     requestAnimationFrame(() => {
       entra.classList.add('visivel');
       sai.classList.remove('visivel');
@@ -93,32 +144,69 @@
     timer = setTimeout(proximo, (s.segundos || SEGUNDOS_PADRAO) * 1000);
   }
 
+  // ------------------------------------------------------------ conteúdo
+  function aplicarManifesto(texto) {
+    let dados;
+    try { dados = JSON.parse(texto); } catch (e) { return; }
+    if (!dados || !Array.isArray(dados.slides)) return;
+    guardar('slides', texto);
+    manifesto = new Map(dados.slides.map((s) => [s.arquivo, s.segundos]));
+  }
+  function aplicarGradeJson(texto) {
+    let dados;
+    try { dados = JSON.parse(texto); } catch (e) { return; }
+    if (!dados || !dados.playlists) return;
+    guardar('grade', texto);
+    grade = dados;
+  }
+  function aplicarFeriados(texto) {
+    let dados;
+    try { dados = JSON.parse(texto); } catch (e) { return; }
+    if (!dados || !Array.isArray(dados.datas)) return;
+    guardar('feriados', texto);
+    feriados = new Set(dados.datas);
+  }
+
   async function buscar() {
-    try {
-      const r = await fetch('slides.json?v=' + Date.now(), { cache: 'no-store' });
-      if (r.ok) aplicar(await r.text());
-      aviso.style.opacity = '0';
-    } catch (e) {
-      // Sem rede: aviso discreto no canto (só quem procura vê) e vida que segue.
-      aviso.textContent = 'offline';
-      aviso.style.opacity = '1';
+    const v = '?v=' + Date.now();
+    let falhou = false;
+    for (const [arquivo, aplicar] of [
+      ['slides.json', aplicarManifesto],
+      ['grade.json', aplicarGradeJson],
+      ['feriados.json', aplicarFeriados],
+    ]) {
+      try {
+        const r = await fetch(arquivo + v, { cache: 'no-store' });
+        if (r.ok) aplicar(await r.text());
+      } catch (e) { falhou = true; }
     }
+    aviso.textContent = falhou ? 'offline' : '';
+    aviso.style.opacity = falhou ? '1' : '0';
+    // Conteúdo novo pode mudar a playlist corrente (ex.: slide trocado).
+    const nomeAtual = playlistNome;
+    playlistNome = '';
+    aplicarGrade();
+    if (!playlistNome) playlistNome = nomeAtual;
   }
 
   function vigiarMadrugada() {
-    const h = new Date().getHours();
+    const h = agora().getHours();
     if (h === HORA_DO_RELOAD && !recarregouHoje) {
       recarregouHoje = true;
-      location.reload();
+      if (!baseSimulada) location.reload();
     }
     if (h !== HORA_DO_RELOAD) recarregouHoje = false;
   }
 
-  // Arranque: primeiro o que estiver guardado (funciona offline), depois a rede.
-  const cache = guardado();
-  if (cache) aplicar(cache);
-  buscar();
+  // Arranque: o que estiver guardado (funciona offline), depois a rede.
+  const s0 = guardado('slides'); if (s0) aplicarManifesto(s0);
+  const g0 = guardado('grade'); if (g0) aplicarGradeJson(g0);
+  const f0 = guardado('feriados'); if (f0) aplicarFeriados(f0);
+  aplicarGrade();
+  proximo();
+  buscar().then(() => { aplicarGrade(); });
   setInterval(buscar, INTERVALO_BUSCA_MS);
+  setInterval(aplicarGrade, INTERVALO_GRADE_MS);
   setInterval(vigiarMadrugada, 60 * 1000);
 })();
 </script>

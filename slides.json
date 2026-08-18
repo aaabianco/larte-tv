@@ -1,17 +1,301 @@
 {
-  "atualizadoEm": "2026-08-18T17:37:11.892Z",
+  "atualizadoEm": "2026-08-18T19:31:29.476Z",
   "slides": [
     {
-      "arquivo": "amostra-classico-lasanha.jpg",
+      "arquivo": "promo-lasanha.jpg",
       "segundos": 7
     },
     {
-      "arquivo": "amostra-riflettore-risotto.jpg",
+      "arquivo": "prato-03.jpg",
       "segundos": 7
     },
     {
-      "arquivo": "amostra-lista-saladas.jpg",
+      "arquivo": "prato-04.jpg",
       "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-01.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-05.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-06.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-02.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-07.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-08.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-03.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-09.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-10.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-04.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-11.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-12.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-05.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-13.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-14.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-06.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-15.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-16.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-07.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-17.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-18.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-08.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-19.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-20.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-09.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-21.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-22.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-10.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-23.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-24.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-11.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-25.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-26.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-12.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-27.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-28.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-13.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-29.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-30.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-14.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-31.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-32.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-15.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-33.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-34.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-16.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-35.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-37.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-17.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-38.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "prato-39.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-18.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-tv-19.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-01.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-02.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-03.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-04.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-05.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-06.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-07.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-08.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-09.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-10.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-11.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-12.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-13.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-14.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-15.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-16.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "pronta-raquete-17.jpg",
+      "segundos": 7
+    },
+    {
+      "arquivo": "institucional.jpg",
+      "segundos": 12
     }
   ]
 }
