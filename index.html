@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>L'ARTE — Menu Board</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* TV em quiosque: nada de barras, nada de cursor, nada de branco piscando. */
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; cursor: none; }
+  .quadro {
+    position: absolute; inset: 0;
+    background-position: center; background-repeat: no-repeat; background-size: contain;
+    background-color: #0a0a0a;
+    opacity: 0; transition: opacity 1.2s ease-in-out;
+  }
+  .quadro.visivel { opacity: 1; }
+  #aviso {
+    position: absolute; right: 12px; bottom: 8px; color: #333; font: 12px sans-serif;
+    opacity: 0; transition: opacity .5s;
+  }
+</style>
+</head>
+<body>
+  <!-- Dois quadros alternam por crossfade; nunca há tela vazia entre slides. -->
+  <div class="quadro" id="a"></div>
+  <div class="quadro" id="b"></div>
+  <div id="aviso"></div>
+
+<script>
+(() => {
+  'use strict';
+  /**
+   * Player do menu board.
+   *
+   * - slides.json dita a ordem e o tempo de cada slide (default 7 s).
+   * - A cada 10 min busca o slides.json de novo com cache-busting; se mudou,
+   *   troca a lista SEM recarregar a página — o carrossel nem pisca.
+   * - Sem rede: segue com o último conteúdo (memória + localStorage) até voltar.
+   * - Uma vez por dia, de madrugada, um reload completo limpa qualquer vazamento
+   *   de memória de dias rodando direto na TV.
+   */
+  const INTERVALO_BUSCA_MS = 10 * 60 * 1000;
+  const SEGUNDOS_PADRAO = 7;
+  const HORA_DO_RELOAD = 4; // 04h — loja fechada
+
+  const quadros = [document.getElementById('a'), document.getElementById('b')];
+  const aviso = document.getElementById('aviso');
+  let ativo = 0;          // qual quadro está visível
+  let slides = [];        // [{arquivo, segundos}]
+  let indice = 0;
+  let timer = null;
+  let assinatura = '';    // p/ saber se o slides.json mudou
+  let recarregouHoje = false;
+
+  const guardar = (json) => { try { localStorage.setItem('slides', json); } catch (e) {} };
+  const guardado = () => { try { return localStorage.getItem('slides'); } catch (e) { return null; } };
+
+  function aplicar(json) {
+    if (json === assinatura) return; // nada mudou
+    let dados;
+    try { dados = JSON.parse(json); } catch (e) { return; }
+    if (!dados || !Array.isArray(dados.slides) || !dados.slides.length) return;
+    assinatura = json;
+    guardar(json);
+    // Pré-carrega tudo antes de assumir: TV não pode mostrar imagem quebrada.
+    let pendentes = dados.slides.length;
+    dados.slides.forEach((s) => {
+      const im = new Image();
+      im.onload = im.onerror = () => { if (--pendentes === 0) assumir(dados.slides); };
+      im.src = s.arquivo;
+    });
+  }
+
+  function assumir(novos) {
+    slides = novos;
+    if (indice >= slides.length) indice = 0;
+    if (!timer) proximo(); // primeira vez: começa o carrossel
+  }
+
+  function proximo() {
+    if (!slides.length) { timer = setTimeout(proximo, 2000); return; }
+    const s = slides[indice % slides.length];
+    indice = (indice + 1) % slides.length;
+    const entra = quadros[1 - ativo];
+    const sai = quadros[ativo];
+    entra.style.backgroundImage = "url('" + s.arquivo + "')";
+    // Um respiro para o estilo assentar antes do fade.
+    requestAnimationFrame(() => {
+      entra.classList.add('visivel');
+      sai.classList.remove('visivel');
+      ativo = 1 - ativo;
+    });
+    timer = setTimeout(proximo, (s.segundos || SEGUNDOS_PADRAO) * 1000);
+  }
+
+  async function buscar() {
+    try {
+      const r = await fetch('slides.json?v=' + Date.now(), { cache: 'no-store' });
+      if (r.ok) aplicar(await r.text());
+      aviso.style.opacity = '0';
+    } catch (e) {
+      // Sem rede: aviso discreto no canto (só quem procura vê) e vida que segue.
+      aviso.textContent = 'offline';
+      aviso.style.opacity = '1';
+    }
+  }
+
+  function vigiarMadrugada() {
+    const h = new Date().getHours();
+    if (h === HORA_DO_RELOAD && !recarregouHoje) {
+      recarregouHoje = true;
+      location.reload();
+    }
+    if (h !== HORA_DO_RELOAD) recarregouHoje = false;
+  }
+
+  // Arranque: primeiro o que estiver guardado (funciona offline), depois a rede.
+  const cache = guardado();
+  if (cache) aplicar(cache);
+  buscar();
+  setInterval(buscar, INTERVALO_BUSCA_MS);
+  setInterval(vigiarMadrugada, 60 * 1000);
+})();
+</script>
+</body>
+</html>
