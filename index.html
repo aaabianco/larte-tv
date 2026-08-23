@@ -220,6 +220,16 @@
     if (h !== HORA_DO_RELOAD) recarregouHoje = false;
   }
 
+  /*
+   * O aparelho da loja cai da rede sozinho, e reiniciar sem internet abria
+   * tela de erro — alguém tinha que redigitar o endereço no controle remoto.
+   * Com o service worker a página fica gravada no Stick e abre offline.
+   * Falhar aqui não pode derrubar o player: sem ele tudo segue como antes.
+   */
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
   // Arranque: o que estiver guardado (funciona offline), depois a rede.
   const s0 = guardado('slides'); if (s0) aplicarManifesto(s0);
   const g0 = guardado('grade'); if (g0) aplicarGradeJson(g0);
