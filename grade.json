@@ -55,7 +55,21 @@
       "prato-21.jpg",
       "prato-16.jpg",
       "pronta-raquete-15.jpg"
+    ],
+    "tv6_almoco_fds_feriado": [
+      "pronta-tv-19.jpg",
+      "pronta-tv-17.jpg",
+      "pronta-tv-18.jpg",
+      "prato-30.jpg",
+      "prato-16.jpg",
+      "prato-21.jpg"
     ]
   },
-  "porTv": {}
+  "porTv": {
+    "6": {
+      "almoco": {
+        "fds_feriado": "tv6_almoco_fds_feriado"
+      }
+    }
+  }
 }
