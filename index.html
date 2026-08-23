@@ -33,8 +33,8 @@
    * Player do menu board com GRADE DE PROGRAMAÇÃO.
    *
    * Papel da TV vem da URL:
-   *   ?tv=1        → loop de promoções (playlist "promo")
-   *   ?tv=2..6     → playlist do daypart/tipo de dia corrente (grade.json)
+   *   ?tv=1..6     → playlist do daypart/tipo de dia corrente (grade.json)
+   *   (a TV 1 já foi travada em "promo"; hoje segue o horário como as outras)
    *   ?agora=ISO   → SÓ PARA TESTE: simula o relógio (segue andando a partir
    *                  do instante passado, então as viradas acontecem de verdade)
    *
@@ -88,13 +88,35 @@
   /** Qual playlist esta TV deve exibir NESTE instante. */
   function playlistAlvo() {
     if (!grade) return null;
-    if (TV === 1) return 'promo';
+    /*
+     * TODAS as TVs seguem o horário, inclusive a 1.
+     *
+     * Ela era travada em "promo" desde o começo, e o dono corrigiu: as
+     * promoções ele carrega DENTRO da grade do horário, conforme o que quer
+     * anunciar naquele turno. Uma TV com playlist fixa obrigava a mexer em
+     * dois lugares para mudar uma coisa só — e a de número 1 é justamente a da
+     * entrada, a que mais muda.
+     *
+     * A playlist "promo" continua existindo: agora é escolha de grade, não
+     * destino de aparelho.
+     */
     const d = agora();
     const min = d.getHours() * 60 + d.getMinutes();
     const fds = d.getDay() === 0 || d.getDay() === 6 || feriados.has(dataISO(d));
     const tipo = fds ? 'fds_feriado' : 'util';
     for (const [nome, faixa] of Object.entries(grade.dayparts || {})) {
       if (min >= minutos(faixa.inicio) && min < minutos(faixa.fim)) {
+        /*
+         * CADA TV PODE TER A SUA GRADE, e a maioria não tem.
+         *
+         * `porTv` é a exceção declarada: se esta TV tiver playlist própria
+         * para este horário, ela manda; se não tiver, cai no `mapa` comum,
+         * que é o que as seis usam hoje. Assim dar grade própria a UMA TV não
+         * obriga a montar as seis, e a casa que nunca precisar disso continua
+         * com um arquivo simples.
+         */
+        const propria = ((grade.porTv || {})[String(TV)] || {})[nome];
+        if (propria && propria[tipo]) return propria[tipo];
         return (grade.mapa?.[nome] || {})[tipo] || null;
       }
     }

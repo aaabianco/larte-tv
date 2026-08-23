@@ -1,39 +1,52 @@
 {
   "_comentario": "Grade de programação das TVs. Horários em HH:MM locais da loja. Editar aqui, rodar publicar-tv.cmd, TVs trocam em até 10 min.",
   "dayparts": {
-    "almoco": { "inicio": "11:00", "fim": "17:00" },
-    "noite": { "inicio": "17:00", "fim": "22:00" }
+    "almoco": {
+      "inicio": "11:00",
+      "fim": "17:00"
+    },
+    "noite": {
+      "inicio": "17:00",
+      "fim": "22:00"
+    }
   },
   "mapa": {
-    "almoco": { "util": "almoco_util", "fds_feriado": "almoco_fds" },
-    "noite": { "util": "noite_util", "fds_feriado": "noite_fds" }
+    "almoco": {
+      "util": "almoco_util",
+      "fds_feriado": "almoco_fds"
+    },
+    "noite": {
+      "util": "noite_util",
+      "fds_feriado": "noite_fds"
+    }
   },
   "playlists": {
-    "promo": ["pronta-raquete-12.jpg", "pronta-raquete-11.jpg", "pronta-raquete-13.jpg"],
-    "institucional": ["institucional.jpg"],
+    "promo": [
+      "pronta-raquete-12.jpg",
+      "pronta-raquete-11.jpg",
+      "pronta-raquete-13.jpg"
+    ],
+    "institucional": [
+      "institucional.jpg"
+    ],
     "almoco_util": [
-      "pronta-tv-04.jpg",
-      "pronta-tv-02.jpg",
-      "pronta-tv-12.jpg",
-      "pronta-tv-06.jpg",
-      "pronta-tv-09.jpg",
-      "pronta-tv-03.jpg"
+      "pronta-tv-17.jpg"
     ],
     "almoco_fds": [
+      "pronta-tv-19.jpg",
       "pronta-tv-17.jpg",
-      "pronta-raquete-16.jpg",
-      "pronta-raquete-01.jpg",
-      "prato-08.jpg",
-      "pronta-raquete-14.jpg",
-      "pronta-tv-07.jpg"
+      "pronta-tv-18.jpg",
+      "prato-30.jpg",
+      "prato-16.jpg",
+      "prato-21.jpg"
     ],
     "noite_util": [
-      "pronta-raquete-03.jpg",
-      "pronta-raquete-05.jpg",
-      "prato-12.jpg",
-      "prato-17.jpg",
-      "pronta-raquete-07.jpg",
-      "prato-38.jpg"
+      "pronta-raquete-01.jpg",
+      "prato-30.jpg",
+      "prato-21.jpg",
+      "pronta-raquete-16.jpg",
+      "pronta-tv-19.jpg",
+      "pronta-tv-17.jpg"
     ],
     "noite_fds": [
       "pronta-raquete-02.jpg",
@@ -43,5 +56,6 @@
       "prato-16.jpg",
       "pronta-raquete-15.jpg"
     ]
-  }
+  },
+  "porTv": {}
 }
