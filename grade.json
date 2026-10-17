@@ -68,9 +68,55 @@
       "prato-30.jpg",
       "prato-16.jpg",
       "prato-21.jpg"
+    ],
+    "tv1_almoco_util": [
+      "prato-28.jpg",
+      "pronta-tv-04.jpg",
+      "pronta-tv-02.jpg",
+      "pronta-tv-12.jpg",
+      "pronta-tv-06.jpg",
+      "pronta-tv-09.jpg",
+      "pronta-tv-03.jpg"
+    ],
+    "tv1_almoco_fds_feriado": [
+      "prato-28.jpg",
+      "pronta-tv-19.jpg",
+      "pronta-tv-17.jpg",
+      "pronta-tv-18.jpg",
+      "prato-30.jpg",
+      "prato-16.jpg",
+      "prato-21.jpg"
+    ],
+    "tv1_noite_util": [
+      "prato-28.jpg",
+      "pronta-raquete-01.jpg",
+      "prato-30.jpg",
+      "prato-21.jpg",
+      "pronta-raquete-16.jpg",
+      "pronta-tv-19.jpg",
+      "pronta-tv-17.jpg"
+    ],
+    "tv1_noite_fds_feriado": [
+      "prato-28.jpg",
+      "pronta-raquete-02.jpg",
+      "pronta-raquete-06.jpg",
+      "pronta-raquete-04.jpg",
+      "prato-21.jpg",
+      "prato-16.jpg",
+      "pronta-raquete-15.jpg"
     ]
   },
   "porTv": {
+    "1": {
+      "almoco": {
+        "util": "tv1_almoco_util",
+        "fds_feriado": "tv1_almoco_fds_feriado"
+      },
+      "noite": {
+        "util": "tv1_noite_util",
+        "fds_feriado": "tv1_noite_fds_feriado"
+      }
+    },
     "6": {
       "almoco": {
         "fds_feriado": "tv6_almoco_fds_feriado"
