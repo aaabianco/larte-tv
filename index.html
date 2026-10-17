@@ -230,6 +230,27 @@
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 
+  /**
+   * A TV NÃO PODE DORMIR. O Fire TV Stick entra em repouso sozinho quando
+   * ninguém mexe no controle — e um carrossel de fotos não conta como vídeo
+   * tocando. A TV mostra "sem sinal" e alguém tem de religar tudo (o dono,
+   * 17/10). O pedido de tela acordada (Screen Wake Lock) segura o Stick
+   * enquanto a página está aberta; o navegador o solta quando a página some,
+   * então ele é pedido de novo ao voltar e conferido de minuto em minuto.
+   * Falhar aqui não pode derrubar o player.
+   */
+  let travaDaTela = null;
+  const manterAcordada = async () => {
+    try {
+      if (!('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+      if (travaDaTela && !travaDaTela.released) return;
+      travaDaTela = await navigator.wakeLock.request('screen');
+    } catch (e) { /* sem suporte ou recusado: segue sem */ }
+  };
+  document.addEventListener('visibilitychange', manterAcordada);
+  manterAcordada();
+  setInterval(manterAcordada, 60 * 1000);
+
   // Arranque: o que estiver guardado (funciona offline), depois a rede.
   const s0 = guardado('slides'); if (s0) aplicarManifesto(s0);
   const g0 = guardado('grade'); if (g0) aplicarGradeJson(g0);
