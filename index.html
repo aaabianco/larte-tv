@@ -129,6 +129,20 @@
     return arquivos.map((a) => ({ arquivo: a, segundos: manifesto.get(a) ?? SEGUNDOS_PADRAO }));
   }
 
+  /**
+   * QUANTO TEMPO CADA FOTO FICA NA TELA — parâmetro da loja, não do código.
+   *
+   * `segundos` na grade.json vale para todas as fotos de todas as TVs (o dono,
+   * 17/10: "aumentar o tempo que cada tela vai aparecendo, coloca como
+   * parâmetro"). Sem ele, vale o tempo de cada slide no slides.json, como
+   * sempre foi. Fora de 3..120 s é erro de digitação: ignora.
+   */
+  function tempoDe(s) {
+    const g = Number(grade && grade.segundos);
+    if (g >= 3 && g <= 120) return g;
+    return s.segundos || SEGUNDOS_PADRAO;
+  }
+
   /** Verificada a cada 30 s; a troca vale a partir do próximo avanço. */
   // Estado inspecionável (suporte e validação): que playlist está no ar?
   window.estadoTv = () => ({
@@ -140,9 +154,17 @@
 
   function aplicarGrade() {
     const alvo = playlistAlvo();
-    if (!alvo || alvo === playlistNome) return;
+    if (!alvo) return;
     const novos = montarSlides(alvo);
     if (!novos.length) return; // playlist vazia: fica onde está
+    /*
+     * Mesma playlist com fotos diferentes também é troca: antes só o NOME
+     * contava, e uma foto posta na lista do horário só aparecia na virada
+     * seguinte ou quando alguém religava a TV.
+     */
+    const iguais = alvo === playlistNome
+      && novos.map((s) => s.arquivo).join('|') === slides.map((s) => s.arquivo).join('|');
+    if (iguais) return;
     playlistNome = alvo;
     slides = novos;
     indice = 0;
@@ -163,7 +185,7 @@
       sai.classList.remove('visivel');
       ativo = 1 - ativo;
     });
-    timer = setTimeout(proximo, (s.segundos || SEGUNDOS_PADRAO) * 1000);
+    timer = setTimeout(proximo, tempoDe(s) * 1000);
   }
 
   // ------------------------------------------------------------ conteúdo
