@@ -1,5 +1,6 @@
 {
   "_comentario": "Grade de programação das TVs. Horários em HH:MM locais da loja. Editar aqui, rodar publicar-tv.cmd, TVs trocam em até 10 min.",
+  "segundos": 15,
   "dayparts": {
     "almoco": {
       "inicio": "10:00",
