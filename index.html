@@ -20,10 +20,6 @@
     object-fit: contain; background: #0a0a0a; display: none;
   }
   #video.visivel { display: block; }
-  /* Vídeo que só segura o Stick acordado: fica atrás de uma capa preta, ninguém vê. */
-  #acordada { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
-  #capa { position: absolute; inset: 0; background: #0a0a0a; display: none; }
-  #acordada.ligada, #capa.ligada { display: block; }
   #aviso {
     position: absolute; right: 12px; bottom: 8px; color: #333; font: 12px sans-serif;
     opacity: 0; transition: opacity .5s;
@@ -32,8 +28,6 @@
 </head>
 <body>
   <!-- Dois quadros alternam por crossfade; nunca há tela vazia entre slides. -->
-  <video id="acordada" muted loop playsinline preload="auto"></video>
-  <div id="capa"></div>
   <div class="quadro" id="a"></div>
   <div class="quadro" id="b"></div>
   <video id="video" muted loop playsinline preload="auto"></video>
@@ -176,7 +170,6 @@
     video: video.classList.contains('visivel') ? video.dataset.arquivo : null,
     videoTocando: !video.paused,
     videoSegundo: video.currentTime,
-    acordada: acordada.classList.contains('ligada') ? { tocando: !acordada.paused, segundo: acordada.currentTime } : null,
     slides: slides.map((s) => s.arquivo),
   });
 
@@ -221,6 +214,14 @@
       const ate = v.ate ? new Date(v.ate).getTime() : Infinity;
       if (t >= de && t < ate) return v.arquivo;
     }
+    /*
+     * PLAYLIST QUE VIROU VÍDEO (o dono, 29/10, TV 1). Vídeo escondido atrás das
+     * fotos não segurou o Stick: ele só conta vídeo que aparece. Então a
+     * playlist do horário é tocada como vídeo (gerar-videos.cjs faz um mp4
+     * com as mesmas fotos); a grade do almoço/noite continua mandando.
+     */
+    const daPlaylist = ((grade && grade.videoDaPlaylist) || {})[playlistNome];
+    if (daPlaylist && !videosQueFalharam.has(daPlaylist)) return daPlaylist;
     return null;
   }
 
@@ -262,45 +263,6 @@
     }
     ultimoSegundo = video.currentTime;
   }, 20000);
-
-  /*
-   * FOTOS COM O STICK ACORDADO (o dono, 29/10: TV 1 como a TV 2, com as fotos).
-   *
-   * O Fire TV Stick entra na tela da Amazon quando acha que ninguém assiste:
-   * carrossel de fotos não conta, vídeo tocando conta — foi o que fez a TV 2
-   * ficar ligada. grade.json → "acordada": { "tvs": ["1"], "arquivo": "x.mp4" }
-   * toca esse vídeo mudo em loop ATRÁS de uma capa preta; as fotos seguem por
-   * cima, com a grade do horário.
-   */
-  const acordada = document.getElementById('acordada');
-  const capa = document.getElementById('capa');
-  let acordadaSegundo = -1;
-  function cuidarDaAcordada() {
-    const cfg = grade && grade.acordada;
-    const quer = tvEscolhida && cfg && cfg.arquivo
-      && (cfg.tvs || []).map(String).includes(String(TV));
-    if (!quer) {
-      if (acordada.classList.contains('ligada')) {
-        acordada.pause(); acordada.removeAttribute('src'); acordada.load();
-        acordada.classList.remove('ligada'); capa.classList.remove('ligada');
-      }
-      return;
-    }
-    if (acordada.dataset.arquivo !== cfg.arquivo) {
-      acordada.dataset.arquivo = cfg.arquivo;
-      acordada.src = cfg.arquivo;
-    }
-    acordada.classList.add('ligada'); capa.classList.add('ligada');
-    if (acordada.paused) acordada.play().catch(() => {});
-    // Travou? Recarrega o arquivo.
-    if (acordada.currentTime === acordadaSegundo) {
-      acordada.src = cfg.arquivo + '?r=' + Date.now();
-      acordada.play().catch(() => {});
-    }
-    acordadaSegundo = acordada.currentTime;
-  }
-  acordada.addEventListener('ended', () => { acordada.currentTime = 0; acordada.play().catch(() => {}); });
-  setInterval(cuidarDaAcordada, 20000);
 
   // Aparelho que não toca o arquivo: marca e volta para as fotos, sem tela preta.
   video.addEventListener('error', () => {
@@ -419,8 +381,7 @@
   const f0 = guardado('feriados'); if (f0) aplicarFeriados(f0);
   aplicarGrade();
   proximo();
-  cuidarDaAcordada();
-  buscar().then(() => { aplicarGrade(); cuidarDaAcordada(); });
+  buscar().then(() => { aplicarGrade(); });
   setInterval(buscar, INTERVALO_BUSCA_MS);
   setInterval(aplicarGrade, INTERVALO_GRADE_MS);
   setInterval(vigiarMadrugada, 60 * 1000);

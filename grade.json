@@ -203,11 +203,11 @@
       "_comentario": "o dono, 29/10: TV 2 direto até sábado 31/10 à noite"
     }
   ],
-  "acordada": {
-    "tvs": [
-      "1"
-    ],
-    "arquivo": "acordada.mp4",
-    "_comentario": "vídeo mudo atrás das fotos: segura o Fire TV Stick acordado (o dono, 29/10)"
-  }
+  "videoDaPlaylist": {
+    "tv1_almoco_util": "video-tv1-almoco-util.mp4",
+    "tv1_almoco_fds_feriado": "video-tv1-almoco-fds-feriado.mp4",
+    "tv1_noite_util": "video-tv1-noite-util.mp4",
+    "tv1_noite_fds_feriado": "video-tv1-noite-fds-feriado.mp4"
+  },
+  "videoSegundos": 10
 }
