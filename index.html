@@ -30,7 +30,7 @@
   <!-- Dois quadros alternam por crossfade; nunca há tela vazia entre slides. -->
   <div class="quadro" id="a"></div>
   <div class="quadro" id="b"></div>
-  <video id="video" muted loop playsinline preload="auto"></video>
+  <video id="video" loop playsinline preload="auto"></video>
   <div id="aviso"></div>
 
 <script>
@@ -169,6 +169,7 @@
     playlist: playlistNome,
     video: video.classList.contains('visivel') ? video.dataset.arquivo : null,
     videoTocando: !video.paused,
+    videoMudo: video.muted,
     videoSegundo: video.currentTime,
     slides: slides.map((s) => s.arquivo),
   });
@@ -225,6 +226,22 @@
     return null;
   }
 
+  /*
+   * COM SOM (MUDO NO ARQUIVO), NÃO "MUTED" (o dono, 29/10: o vídeo parou no Silk).
+   * O Stick só conta como "tem alguém assistindo" o vídeo que toca som; vídeo
+   * com muted ele deixa a tela da Amazon entrar. Os arquivos têm faixa de som
+   * em silêncio (gerar-videos.cjs), então tocar sem muted não faz barulho.
+   * Se o navegador recusar som sem um toque no controle, toca muted e tenta
+   * de novo no primeiro botão apertado.
+   */
+  function tocar() {
+    video.muted = false;
+    video.volume = 1;
+    return video.play().catch(() => { video.muted = true; return video.play().catch(() => {}); });
+  }
+  ['keydown', 'click', 'pointerdown'].forEach((ev) =>
+    window.addEventListener(ev, () => { if (video.muted && video.dataset.arquivo) tocar(); }));
+
   /** true = o vídeo está no ar e o carrossel espera. */
   function cuidarDoVideo() {
     const alvo = videoAlvo();
@@ -243,7 +260,7 @@
       video.src = alvo;
     }
     video.classList.add('visivel');
-    if (video.paused) video.play().catch(() => {});
+    if (video.paused || video.muted) tocar();
     return true;
   }
   /*
@@ -251,7 +268,7 @@
    * sugestões por cima (o dono, 29/10). Aqui o loop é do próprio navegador;
    * se algum aparelho ignorar o loop e soltar "ended", recomeça na hora.
    */
-  video.addEventListener('ended', () => { video.currentTime = 0; video.play().catch(() => {}); });
+  video.addEventListener('ended', () => { video.currentTime = 0; tocar(); });
   // Travou (rede, decodificador)? Se o tempo não anda em 20 s, recarrega o arquivo.
   let ultimoSegundo = -1;
   setInterval(() => {
@@ -259,7 +276,7 @@
     if (video.currentTime === ultimoSegundo) {
       const a = video.dataset.arquivo;
       video.src = a + '?r=' + Date.now();
-      video.play().catch(() => {});
+      tocar();
     }
     ultimoSegundo = video.currentTime;
   }, 20000);
