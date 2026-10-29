@@ -14,6 +14,12 @@
     opacity: 0; transition: opacity 1.2s ease-in-out;
   }
   .quadro.visivel { opacity: 1; }
+  /* O vídeo cobre o carrossel enquanto está no ar; fora do prazo some. */
+  #video {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: contain; background: #0a0a0a; display: none;
+  }
+  #video.visivel { display: block; }
   #aviso {
     position: absolute; right: 12px; bottom: 8px; color: #333; font: 12px sans-serif;
     opacity: 0; transition: opacity .5s;
@@ -24,6 +30,7 @@
   <!-- Dois quadros alternam por crossfade; nunca há tela vazia entre slides. -->
   <div class="quadro" id="a"></div>
   <div class="quadro" id="b"></div>
+  <video id="video" muted loop playsinline preload="auto"></video>
   <div id="aviso"></div>
 
 <script>
@@ -64,6 +71,8 @@
 
   const quadros = [document.getElementById('a'), document.getElementById('b')];
   const aviso = document.getElementById('aviso');
+  const video = document.getElementById('video');
+  const videosQueFalharam = new Set(); // aparelho que não toca o arquivo: volta às fotos
   let ativo = 0;
   let manifesto = new Map(); // arquivo → segundos
   let grade = null;          // grade.json
@@ -149,6 +158,9 @@
     tv: TV,
     relogio: agora().toString(),
     playlist: playlistNome,
+    video: video.classList.contains('visivel') ? video.dataset.arquivo : null,
+    videoTocando: !video.paused,
+    videoSegundo: video.currentTime,
     slides: slides.map((s) => s.arquivo),
   });
 
@@ -172,8 +184,81 @@
     novos.forEach((s) => { const im = new Image(); im.src = s.arquivo; });
   }
 
+  // ------------------------------------------------------------ vídeo
+  /**
+   * UM VÍDEO EM LOOP NUMA TV, COM PRAZO (o dono, 29/10: "este vídeo na TV 2
+   * direto, de hoje até sábado à noite").
+   *
+   * grade.json → "videos": [{ "tv": "2", "arquivo": "x.mp4", "de": ISO, "ate": ISO }]
+   * Dentro do prazo o vídeo cobre o carrossel, em qualquer horário (a grade
+   * do almoço/noite não manda nele). Passou o "ate", a TV volta sozinha para
+   * as fotos — ninguém precisa lembrar de tirar. Sem som: o navegador da TV
+   * só toca sozinho vídeo mudo.
+   */
+  function videoAlvo() {
+    // Sem ?tv= na URL a página cai na TV 2 por padrão; o vídeo só vai para quem pediu.
+    if (!params.has('tv')) return null;
+    const t = agora().getTime();
+    for (const v of (grade && grade.videos) || []) {
+      if (String(v.tv) !== String(TV) || !v.arquivo || videosQueFalharam.has(v.arquivo)) continue;
+      const de = v.de ? new Date(v.de).getTime() : -Infinity;
+      const ate = v.ate ? new Date(v.ate).getTime() : Infinity;
+      if (t >= de && t < ate) return v.arquivo;
+    }
+    return null;
+  }
+
+  /** true = o vídeo está no ar e o carrossel espera. */
+  function cuidarDoVideo() {
+    const alvo = videoAlvo();
+    if (!alvo) {
+      if (video.classList.contains('visivel')) {
+        video.pause();
+        video.removeAttribute('src');
+        delete video.dataset.arquivo;
+        video.load();
+        video.classList.remove('visivel');
+      }
+      return false;
+    }
+    if (video.dataset.arquivo !== alvo) {
+      video.dataset.arquivo = alvo;
+      video.src = alvo;
+    }
+    video.classList.add('visivel');
+    if (video.paused) video.play().catch(() => {});
+    return true;
+  }
+  /*
+   * NUNCA PARAR NO FIM. No YouTube, quando o vídeo acabava, entrava a tela de
+   * sugestões por cima (o dono, 29/10). Aqui o loop é do próprio navegador;
+   * se algum aparelho ignorar o loop e soltar "ended", recomeça na hora.
+   */
+  video.addEventListener('ended', () => { video.currentTime = 0; video.play().catch(() => {}); });
+  // Travou (rede, decodificador)? Se o tempo não anda em 20 s, recarrega o arquivo.
+  let ultimoSegundo = -1;
+  setInterval(() => {
+    if (!video.classList.contains('visivel') || !video.dataset.arquivo) return;
+    if (video.currentTime === ultimoSegundo) {
+      const a = video.dataset.arquivo;
+      video.src = a + '?r=' + Date.now();
+      video.play().catch(() => {});
+    }
+    ultimoSegundo = video.currentTime;
+  }, 20000);
+
+  // Aparelho que não toca o arquivo: marca e volta para as fotos, sem tela preta.
+  video.addEventListener('error', () => {
+    if (!video.dataset.arquivo) return;
+    videosQueFalharam.add(video.dataset.arquivo);
+    delete video.dataset.arquivo;
+    video.removeAttribute('src');
+    video.classList.remove('visivel');
+  });
+
   // ------------------------------------------------------------ carrossel
   function proximo() {
+    if (cuidarDoVideo()) { timer = setTimeout(proximo, 15000); return; }
     if (!slides.length) { timer = setTimeout(proximo, 2000); return; }
     const s = slides[indice % slides.length];
     indice = (indice + 1) % slides.length;

@@ -193,5 +193,14 @@
         "fds_feriado": "tv7_noite_fds_feriado"
       }
     }
-  }
+  },
+  "videos": [
+    {
+      "tv": "2",
+      "arquivo": "video-tv2-2026-10-29.mp4",
+      "de": "2026-10-29T00:00:00-03:00",
+      "ate": "2026-11-01T00:00:00-03:00",
+      "_comentario": "o dono, 29/10: TV 2 direto até sábado 31/10 à noite"
+    }
+  ]
 }
