@@ -119,6 +119,52 @@
       "prato-21.jpg",
       "prato-16.jpg",
       "pronta-raquete-15.jpg"
+    ],
+    "tv7_almoco_util": [
+      "pronta-tv-04.jpg",
+      "halloween-pizza-night.jpg",
+      "pronta-tv-02.jpg",
+      "pronta-tv-12.jpg",
+      "pronta-tv-06.jpg",
+      "halloween-pizza-night.jpg",
+      "pronta-tv-09.jpg",
+      "pronta-tv-03.jpg"
+    ],
+    "tv7_almoco_fds_feriado": [
+      "pronta-tv-13.jpg",
+      "halloween-pizza-night.jpg",
+      "pronta-tv-02.jpg",
+      "pronta-tv-19.jpg",
+      "pronta-tv-17.jpg",
+      "pronta-tv-18.jpg",
+      "halloween-pizza-night.jpg",
+      "prato-30.jpg",
+      "prato-16.jpg",
+      "prato-21.jpg"
+    ],
+    "tv7_noite_util": [
+      "pronta-tv-13.jpg",
+      "halloween-pizza-night.jpg",
+      "pronta-tv-02.jpg",
+      "pronta-raquete-01.jpg",
+      "prato-30.jpg",
+      "prato-21.jpg",
+      "halloween-pizza-night.jpg",
+      "pronta-raquete-16.jpg",
+      "pronta-tv-19.jpg",
+      "pronta-tv-17.jpg"
+    ],
+    "tv7_noite_fds_feriado": [
+      "pronta-tv-13.jpg",
+      "halloween-pizza-night.jpg",
+      "pronta-tv-02.jpg",
+      "pronta-raquete-02.jpg",
+      "pronta-raquete-06.jpg",
+      "pronta-raquete-04.jpg",
+      "halloween-pizza-night.jpg",
+      "prato-21.jpg",
+      "prato-16.jpg",
+      "pronta-raquete-15.jpg"
     ]
   },
   "porTv": {
@@ -135,6 +181,16 @@
     "6": {
       "almoco": {
         "fds_feriado": "tv6_almoco_fds_feriado"
+      }
+    },
+    "7": {
+      "almoco": {
+        "util": "tv7_almoco_util",
+        "fds_feriado": "tv7_almoco_fds_feriado"
+      },
+      "noite": {
+        "util": "tv7_noite_util",
+        "fds_feriado": "tv7_noite_fds_feriado"
       }
     }
   }
