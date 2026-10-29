@@ -239,8 +239,38 @@
     video.volume = 1;
     return video.play().catch(() => { video.muted = true; return video.play().catch(() => {}); });
   }
+  /*
+   * O OK DO CONTROLE PÕE O VÍDEO EM TELA CHEIA (o dono, 29/10: a tela da Amazon
+   * ainda entrava). Vídeo em tela cheia é o modo de "assistir" do aparelho;
+   * tela cheia só pode ser pedida com um botão apertado, por isso aqui.
+   */
+  function telaCheia() {
+    const el = video.classList.contains('visivel') ? video : document.documentElement;
+    if (document.fullscreenElement === el) return;
+    const pede = el.requestFullscreen || el.webkitRequestFullscreen || el.webkitEnterFullscreen;
+    try { const p = pede && pede.call(el); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+  }
   ['keydown', 'click', 'pointerdown'].forEach((ev) =>
-    window.addEventListener(ev, () => { if (video.muted && video.dataset.arquivo) tocar(); }));
+    window.addEventListener(ev, () => {
+      if (!video.dataset.arquivo) return;
+      if (video.muted || video.paused) tocar();
+      telaCheia();
+    }));
+
+  /*
+   * AVISA O APARELHO QUE HÁ MÍDIA TOCANDO (Media Session), como faz o app do
+   * YouTube; é o que o sistema da TV olha antes de pôr a tela da Amazon.
+   */
+  function avisarMidia() {
+    if (!('mediaSession' in navigator)) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({ title: "L'ARTE Gourmet", artist: 'TV ' + TV });
+      navigator.mediaSession.playbackState = video.paused ? 'paused' : 'playing';
+      navigator.mediaSession.setActionHandler('pause', () => tocar());
+    } catch (e) {}
+  }
+  video.addEventListener('playing', avisarMidia);
+  video.addEventListener('pause', avisarMidia);
 
   /** true = o vídeo está no ar e o carrossel espera. */
   function cuidarDoVideo() {
@@ -252,6 +282,8 @@
         delete video.dataset.arquivo;
         video.load();
         video.classList.remove('visivel');
+        // vídeo saiu do ar (prazo acabou): sai da tela cheia, as fotos voltam
+        if (document.fullscreenElement === video) document.exitFullscreen().catch(() => {});
       }
       return false;
     }
