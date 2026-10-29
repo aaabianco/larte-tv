@@ -202,5 +202,12 @@
       "ate": "2026-11-01T00:00:00-03:00",
       "_comentario": "o dono, 29/10: TV 2 direto até sábado 31/10 à noite"
     }
-  ]
+  ],
+  "acordada": {
+    "tvs": [
+      "1"
+    ],
+    "arquivo": "acordada.mp4",
+    "_comentario": "vídeo mudo atrás das fotos: segura o Fire TV Stick acordado (o dono, 29/10)"
+  }
 }
