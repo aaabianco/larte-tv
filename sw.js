@@ -72,8 +72,12 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
       fetch(req)
         .then((r) => {
-          const copia = r.clone();
-          caches.open(CACHE).then((c) => c.put('./index.html', copia));
+          // Só o player vira a cópia offline; os atalhos /1../7 são só um redirecionamento.
+          const doPlayer = new URL('./', self.registration.scope).pathname;
+          if (r.ok && (url.pathname === doPlayer || url.pathname === doPlayer + 'index.html')) {
+            const copia = r.clone();
+            caches.open(CACHE).then((c) => c.put('./index.html', copia));
+          }
           return r;
         })
         .catch(() => caches.match('./index.html').then((r) => r || caches.match('./'))),

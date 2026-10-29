@@ -65,7 +65,16 @@
   const HORA_DO_RELOAD = 4; // 04h — loja fechada
 
   const params = new URLSearchParams(location.search);
-  const TV = Math.max(1, parseInt(params.get('tv') || '2', 10) || 2);
+  /*
+   * O NÚMERO DA TV FICA GUARDADO NO APARELHO (o dono, 29/10: mexeu no controle,
+   * a página fechou e o endereço com ?tv= sumiu). Aberta uma vez com ?tv=N
+   * (ou pelo atalho /N), a TV lembra; depois basta abrir o endereço puro.
+   */
+  let tvGuardada = null;
+  try { tvGuardada = localStorage.getItem('tvNumero'); } catch (e) {}
+  if (params.has('tv')) { try { localStorage.setItem('tvNumero', params.get('tv')); } catch (e) {} }
+  const tvEscolhida = params.get('tv') || tvGuardada;
+  const TV = Math.max(1, parseInt(tvEscolhida || '2', 10) || 2);
 
   // Relógio: real, ou simulado que ANDA (para provar as viradas em teste).
   const baseSimulada = params.get('agora') ? new Date(params.get('agora')) : null;
@@ -204,7 +213,7 @@
    */
   function videoAlvo() {
     // Sem ?tv= na URL a página cai na TV 2 por padrão; o vídeo só vai para quem pediu.
-    if (!params.has('tv')) return null;
+    if (!tvEscolhida) return null;
     const t = agora().getTime();
     for (const v of (grade && grade.videos) || []) {
       if (String(v.tv) !== String(TV) || !v.arquivo || videosQueFalharam.has(v.arquivo)) continue;
@@ -268,7 +277,7 @@
   let acordadaSegundo = -1;
   function cuidarDaAcordada() {
     const cfg = grade && grade.acordada;
-    const quer = params.has('tv') && cfg && cfg.arquivo
+    const quer = tvEscolhida && cfg && cfg.arquivo
       && (cfg.tvs || []).map(String).includes(String(TV));
     if (!quer) {
       if (acordada.classList.contains('ligada')) {
