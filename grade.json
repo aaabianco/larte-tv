@@ -119,6 +119,19 @@
       "prato-21.jpg",
       "prato-16.jpg",
       "pronta-raquete-15.jpg"
+    ],
+    "tv2": [
+      "prato-27.jpg",
+      "prato-34.jpg",
+      "prato-24.jpg",
+      "prato-25.jpg",
+      "prato-32.jpg",
+      "prato-33.jpg",
+      "prato-35.jpg",
+      "prato-38.jpg",
+      "prato-37.jpg",
+      "prato-31.jpg",
+      "prato-26.jpg"
     ]
   },
   "porTv": {
@@ -130,6 +143,16 @@
       "noite": {
         "util": "tv1_noite_util",
         "fds_feriado": "tv1_noite_fds_feriado"
+      }
+    },
+    "2": {
+      "almoco": {
+        "util": "tv2",
+        "fds_feriado": "tv2"
+      },
+      "noite": {
+        "util": "tv2",
+        "fds_feriado": "tv2"
       }
     },
     "6": {
