@@ -132,17 +132,26 @@
       "prato-37.jpg",
       "prato-31.jpg",
       "prato-26.jpg"
+    ],
+    "tv1_pizzas": [
+      "prato-28.jpg",
+      "pronta-raquete-01.jpg",
+      "pronta-raquete-06.jpg"
+    ],
+    "tv3_pizzas": [
+      "pronta-raquete-01.jpg",
+      "pronta-raquete-06.jpg"
     ]
   },
   "porTv": {
     "1": {
       "almoco": {
-        "util": "tv1_almoco_util",
-        "fds_feriado": "tv1_almoco_fds_feriado"
+        "util": "tv1_pizzas",
+        "fds_feriado": "tv1_pizzas"
       },
       "noite": {
-        "util": "tv1_noite_util",
-        "fds_feriado": "tv1_noite_fds_feriado"
+        "util": "tv1_pizzas",
+        "fds_feriado": "tv1_pizzas"
       }
     },
     "2": {
@@ -153,6 +162,16 @@
       "noite": {
         "util": "tv2",
         "fds_feriado": "tv2"
+      }
+    },
+    "3": {
+      "almoco": {
+        "util": "tv3_pizzas",
+        "fds_feriado": "tv3_pizzas"
+      },
+      "noite": {
+        "util": "tv3_pizzas",
+        "fds_feriado": "tv3_pizzas"
       }
     },
     "6": {
