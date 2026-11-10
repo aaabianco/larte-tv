@@ -156,7 +156,7 @@
   "porTv": {
     "1": {
       "almoco": {
-        "util": "tv1_pizzas",
+        "util": "tv1_almoco_util",
         "fds_feriado": "tv1_pizzas"
       },
       "noite": {
@@ -166,7 +166,7 @@
     },
     "2": {
       "almoco": {
-        "util": "tv2",
+        "util": "almoco_util",
         "fds_feriado": "tv2"
       },
       "noite": {
@@ -176,7 +176,7 @@
     },
     "3": {
       "almoco": {
-        "util": "tv3_pizzas",
+        "util": "almoco_util",
         "fds_feriado": "tv3_pizzas"
       },
       "noite": {
