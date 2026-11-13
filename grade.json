@@ -151,6 +151,9 @@
       "pronta-raquete-04.jpg",
       "pronta-raquete-05.jpg",
       "pronta-raquete-06.jpg"
+    ],
+    "tv7_chuck": [
+      "promo-chuck-eye-roll.jpg"
     ]
   },
   "porTv": {
@@ -187,6 +190,16 @@
     "6": {
       "almoco": {
         "fds_feriado": "tv6_almoco_fds_feriado"
+      }
+    },
+    "7": {
+      "almoco": {
+        "util": "tv7_chuck",
+        "fds_feriado": "tv7_chuck"
+      },
+      "noite": {
+        "util": "tv7_chuck",
+        "fds_feriado": "tv7_chuck"
       }
     }
   },
