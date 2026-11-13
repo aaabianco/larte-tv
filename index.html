@@ -8,7 +8,7 @@
   /* TV em quiosque: nada de barras, nada de cursor, nada de branco piscando. */
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #0a0a0a; overflow: hidden; cursor: none; }
   .quadro {
-    position: absolute; inset: 0;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background-position: center; background-repeat: no-repeat; background-size: contain;
     background-color: #0a0a0a;
     opacity: 0; transition: opacity 1.2s ease-in-out;
@@ -16,7 +16,7 @@
   .quadro.visivel { opacity: 1; }
   /* O vídeo cobre o carrossel enquanto está no ar; fora do prazo some. */
   #video {
-    position: absolute; inset: 0; width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;
     object-fit: contain; background: #0a0a0a; display: none;
   }
   #video.visivel { display: block; }
