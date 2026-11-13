@@ -179,7 +179,7 @@
     },
     "3": {
       "almoco": {
-        "util": "almoco_util",
+        "util": "tv3_pizzas",
         "fds_feriado": "tv3_pizzas"
       },
       "noite": {
