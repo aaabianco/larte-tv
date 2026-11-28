@@ -31,6 +31,7 @@
       "institucional.jpg"
     ],
     "almoco_util": [
+      "pronta-tv-23.jpg",
       "pronta-tv-04.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-12.jpg",
@@ -39,6 +40,7 @@
       "pronta-tv-03.jpg"
     ],
     "almoco_fds": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-19.jpg",
@@ -49,6 +51,7 @@
       "prato-21.jpg"
     ],
     "noite_util": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-raquete-01.jpg",
@@ -59,6 +62,7 @@
       "pronta-tv-17.jpg"
     ],
     "noite_fds": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-raquete-02.jpg",
@@ -69,6 +73,7 @@
       "pronta-raquete-15.jpg"
     ],
     "tv6_almoco_fds_feriado": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-19.jpg",
@@ -81,7 +86,7 @@
     ],
     "tv1_almoco_util": [
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "prato-28.jpg",
       "pronta-tv-04.jpg",
       "pronta-tv-02.jpg",
@@ -91,6 +96,7 @@
       "pronta-tv-03.jpg"
     ],
     "tv1_almoco_fds_feriado": [
+      "pronta-tv-23.jpg",
       "prato-28.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
@@ -102,6 +108,7 @@
       "prato-21.jpg"
     ],
     "tv1_noite_util": [
+      "pronta-tv-23.jpg",
       "prato-28.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
@@ -113,6 +120,7 @@
       "pronta-tv-17.jpg"
     ],
     "tv1_noite_fds_feriado": [
+      "pronta-tv-23.jpg",
       "prato-28.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
@@ -127,7 +135,7 @@
       "prato-31.jpg",
       "prato-26.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "prato-27.jpg",
       "prato-34.jpg",
       "prato-24.jpg",
@@ -140,7 +148,7 @@
     ],
     "tv1_pizzas": [
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "prato-28.jpg",
       "pronta-raquete-17.jpg",
       "pronta-raquete-01.jpg",
@@ -156,7 +164,7 @@
       "pronta-raquete-05.jpg",
       "pronta-raquete-06.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "pronta-raquete-17.jpg",
       "pronta-raquete-01.jpg",
       "pronta-raquete-02.jpg"
@@ -164,13 +172,13 @@
     "tv7_vitrine": [
       "pronta-tv-14.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg"
+      "pronta-tv-23.jpg"
     ],
     "tv2_almoco_util": [
       "pronta-tv-09.jpg",
       "pronta-tv-03.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "pronta-tv-04.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-12.jpg",
@@ -184,7 +192,7 @@
       "pronta-tv-09.jpg",
       "pronta-tv-03.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg"
+      "pronta-tv-23.jpg"
     ],
     "tv4_almoco_fds": [
       "pronta-tv-19.jpg",
@@ -194,7 +202,7 @@
       "prato-16.jpg",
       "prato-21.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg"
     ],
@@ -206,7 +214,7 @@
       "pronta-tv-19.jpg",
       "pronta-tv-17.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg"
     ],
@@ -218,11 +226,12 @@
       "prato-16.jpg",
       "pronta-raquete-15.jpg",
       "promo-wagyu-coxao-mole.jpg",
-      "pronta-tv-21.jpg",
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg"
     ],
     "tv5_almoco_util": [
+      "pronta-tv-23.jpg",
       "pronta-tv-04.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-12.jpg",
@@ -232,6 +241,7 @@
       "pronta-tv-03.jpg"
     ],
     "tv5_almoco_fds": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-19.jpg",
@@ -243,6 +253,7 @@
       "prato-21.jpg"
     ],
     "tv5_noite_util": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-raquete-01.jpg",
@@ -254,6 +265,7 @@
       "pronta-tv-17.jpg"
     ],
     "tv5_noite_fds": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-raquete-02.jpg",
@@ -265,6 +277,7 @@
       "pronta-raquete-15.jpg"
     ],
     "tv6_almoco_util": [
+      "pronta-tv-23.jpg",
       "pronta-tv-04.jpg",
       "pronta-tv-02.jpg",
       "pronta-tv-12.jpg",
@@ -274,6 +287,7 @@
       "pronta-tv-03.jpg"
     ],
     "tv6_noite_util": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-raquete-01.jpg",
@@ -285,6 +299,7 @@
       "pronta-tv-17.jpg"
     ],
     "tv6_noite_fds": [
+      "pronta-tv-23.jpg",
       "pronta-tv-13.jpg",
       "pronta-tv-02.jpg",
       "pronta-raquete-02.jpg",
